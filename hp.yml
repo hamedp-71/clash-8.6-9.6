@@ -1,0 +1,65 @@
+port: 7890
+socks-port: 7891
+redir-port: 7892
+mixed-port: 7893
+tproxy-port: 7895
+ipv6: false
+mode: rule
+log-level: silent
+allow-lan: true
+external-controller: 0.0.0.0:9090
+secret: ""
+bind-address: "*"
+unified-delay: true
+profile:
+  store-selected: true
+dns:
+  enable: true
+  ipv6: false
+  enhanced-mode: redir-host
+  listen: 0.0.0.0:7874
+  nameserver:
+    - 8.8.8.8
+    - 1.0.0.1
+    - https://dns.google/dns-query
+  fallback:
+    - 1.1.1.1
+    - 8.8.4.4
+    - https://cloudflare-dns.com/dns-query
+    - 112.215.203.254
+  default-nameserver:
+    - 8.8.8.8
+    - 1.1.1.1
+    - 112.215.203.254
+proxies:
+  - name: "VLESS - Domain 1 : 443"
+    server: bpb-worker-panel0-e4p.pages.dev
+    port: 443
+    type: vless
+    uuid: 4045e84e-5e3c-4f70-8ff5-c1097882a55a
+    cipher: auto
+    tls: true
+    skip-cert-verify: true
+    servername: bPb-workER-panel0-e4p.paGES.DEv
+    network: ws
+    ws-opts:
+      path: /vfs9PAJTXmhQHgUm/YnBiLnlvdXNlZi5pc2VnYXJvLmNvbQ==
+      headers:
+        Host: bpb-worker-panel0-e4p.pages.dev
+    udp: true
+proxy-groups:
+  - name: FASTSSH-SSHKIT-HOWDY
+    type: select
+    proxies:
+      - "VLESS - Domain 1 : 443"
+      - BEST-PING
+      - DIRECT
+  - name: BEST-PING
+    type: url-test
+    url: http://hi.bonds.id/ping
+    interval: 300
+    tolerance: 50
+    proxies:
+      - "VLESS - Domain 1 : 443"
+rules:
+  - MATCH,FASTSSH-SSHKIT-HOWDY
